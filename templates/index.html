@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime In Dallas</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+    <!-- Leaflet JavaScript code -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <!-- plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- confetti -->
+    <script src="../static/js/index.min.js"></script>
+
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="https://www.dallasopendata.com/Public-Safety/Police-Arrests/sdr7-6v3j" target="_blank">
+      <img src="data:image/png;base64,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" width="150" height="75" alt="">
+    </a>
+  </nav>
+    <div class="container">
+        <div class="row">
+          <div class="col-md-12 jumbotron text-center">
+            <h1>Drug Related Crimes in Dallas</h1>
+            <p>Use the interactive charts below to explore the dataset</p><em>data last pulled on 11/10/2022</em>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div class="well">
+              <h3 class="text-center"> <strong> Choose your timeframe:</strong></h3>
+            <div class="container">
+                <a href="/">   
+                    <button class="btn btn-primary btn-lg">Today</button>
+                </a>
+                <a href="/weekly">
+                    <button class="btn btn-primary btn-lg">Weekly</button>
+                </a>
+                <a href="/monthly">
+                    <button class="btn btn-primary btn-lg">Monthly</button>
+                </a>
+                <a href="/yearly">
+                    <button class="btn btn-primary btn-lg">Yearly</button>
+                </a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <canvas id="my-canvas"></canvas>
+
+    <div id="map"></div>
+    <div class="row">
+      <div class="col-md-5">
+        <div id="chart1"></div>   
+        <!-- graphics -->
+      </div>
+      <div class="col-md-2">
+
+      </div>
+      <div class="col-md-5">
+
+        <div id="chart2">
+          <!-- graphics -->
+        </div> 
+
+      </div>
+  </div>  
+    <!-- insert javascipt files under here -->
+    <script type="text/javascript" src="..\static\js\today_data.js"></script>
+    <script type="text/javascript" src="..\static\js\week_data.js"></script>
+    <script type="text/javascript" src="..\static\js\month_data.js"></script>
+    <script type="text/javascript" src="..\static\js\year_data.js"></script>
+    <script type="text/javascript" src="..\static\js\today_visuals.js"></script>
+      
+</body>
+</html>
